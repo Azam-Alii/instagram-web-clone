@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const catchAsyncError = require("../middleware/catchAsyncError");
 const cloudinary = require("cloudinary");
 
+// first phase of registration thorugh google account. If account already exist then just login else create temporary user //
+// and move on to registration phase. //
 exports.processRegisterS1 = async (req, res) => {
   const user = await User.findOne({ googleId: req.body.id });
 
@@ -23,9 +25,8 @@ exports.processRegisterS1 = async (req, res) => {
   }
 };
 
+// fetching temporary user data which was half registered in previous step //
 exports.processRegisterS2 = async (req, res) => {
-  // fetching google data which was half registered in previous step //
-
   const { tempToken } = req.cookies;
 
   const id = jwt.verify(tempToken, process.env.JWT_SECRET);
@@ -36,6 +37,7 @@ exports.processRegisterS2 = async (req, res) => {
   });
 };
 
+// creating user on successful completion or throw error if any //
 exports.processRegisterS3 = catchAsyncError(async (req, res) => {
   const { tempToken } = req.cookies;
   const id = jwt.verify(tempToken, process.env.JWT_SECRET);
@@ -54,6 +56,8 @@ exports.processRegisterS3 = catchAsyncError(async (req, res) => {
     user.username = req.body.username.toLowerCase();
     user.password = await bcrypt.hash(password, 10);
     user.isRegistered = true;
+
+    // getting default user pfp //
     const myCloud = await cloudinary.v2.uploader.upload(
       "https://res.cloudinary.com/duvgguhqc/image/upload/v1669574324/Avatars/default-pfp_mltcik.png",
       { folder: "Avatars" }
@@ -65,6 +69,7 @@ exports.processRegisterS3 = catchAsyncError(async (req, res) => {
 
     await user.save();
 
+    // saving up the cookie and logging in //
     res.cookie("token", tempToken).clearCookie("tempToken").status(200).json({
       response: true,
     });

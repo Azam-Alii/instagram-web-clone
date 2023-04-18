@@ -12,6 +12,7 @@ exports.createPost = catchAsyncError(async (req, res, next) => {
 
   images = req.body.images;
 
+  // converting image files to image links on cloudinary //
   const imageLinks = [];
   for (let i = 0; i < images.length; i++) {
     const myCloud = await cloudinary.v2.uploader.upload(images[i], {
@@ -31,6 +32,8 @@ exports.createPost = catchAsyncError(async (req, res, next) => {
   const post = await Post.create(postBody);
 
   const id = req.user._id;
+
+  // finding the current user and pushing created post into its posts array //
   await User.findByIdAndUpdate(id, { $push: { posts: post } });
 
   res.status(200).json({
@@ -43,9 +46,11 @@ exports.getFeedPosts = catchAsyncError(async (req, res) => {
 
   let posts = [];
 
+  // getting current user posts //
   const loggedInUserPosts = await Post.find({ author: req.user._id }).populate("author").populate("comments.author");
   posts.push(...loggedInUserPosts);
 
+  // getting current user's following posts //
   for (let i = 0; i < array.length; i++) {
     await Post.find({ author: array[i].toString() })
       .populate("author")
@@ -55,6 +60,7 @@ exports.getFeedPosts = catchAsyncError(async (req, res) => {
       });
   }
 
+  // sorting them in most recent order //
   posts.sort((a, b) => {
     return b.createdAt - a.createdAt;
   });
@@ -64,6 +70,7 @@ exports.getFeedPosts = catchAsyncError(async (req, res) => {
   });
 });
 
+// getting post detail through postId fetched from parameters //
 exports.getSinglePost = catchAsyncError(async (req, res) => {
   const { postId } = req.params;
   const post = await Post.findById(postId).populate("author").populate("comments.author");
@@ -88,9 +95,12 @@ exports.handleLike = catchAsyncError(async (req, res) => {
       message: "post not found",
     });
   }
+
+  // if already liked means if current user already exist in liked array of post then pull the user up //
   if (post.usersLiked.includes(user._id)) {
     await post.update({ $pull: { usersLiked: user._id } });
   } else {
+    // else push the user into the liked array and create notification //
     post.usersLiked.push(user);
     if (post.author._id.toString() !== req.user._id.toString()) {
       const notification = {
@@ -98,10 +108,14 @@ exports.handleLike = catchAsyncError(async (req, res) => {
         reference: `/p/${post._id}`,
         timeStamp: new Date(Date.now()).getTime(),
       };
+
+      // checking weather the notification already present to prevent duplicacy //
       const isPresent = await Notifications.findOne({
         content: notification.content,
         reference: notification.reference,
       });
+
+      // if not then create the notification and push it into current users notifications array //
       if (!isPresent) {
         const newNotification = await Notifications.create(notification);
         await User.findByIdAndUpdate(post.author._id, {
@@ -116,6 +130,7 @@ exports.handleLike = catchAsyncError(async (req, res) => {
   });
 });
 
+// getting user's posts to show on profile page of respective user//
 exports.getUserPost = catchAsyncError(async (req, res) => {
   const { username } = req.params;
   const user = await User.findOne({ username });

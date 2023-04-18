@@ -4,9 +4,9 @@ const Message = require("../model/messageModal");
 
 exports.createChat = async (req, res) => {
   try {
-    const secondUser = req.body.reciever;
-    const user = req.user._id;
-    const chat = await Chat.create({ users: [user, secondUser] });
+    const reciever = req.body.reciever;
+    const sender = req.user._id;
+    const chat = await Chat.create({ users: [sender, reciever] });
 
     res.status(200).json({ chat });
   } catch (err) {
@@ -43,6 +43,8 @@ exports.getMessages = async (req, res) => {
 exports.getAllChats = async (req, res) => {
   try {
     const user = req.user;
+
+    // getting all the chats where current user id is present in users array //
     const chats = await Chat.find({ users: { $in: [user._id] } }).populate("users");
 
     res.status(200).json({
