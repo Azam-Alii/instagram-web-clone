@@ -156,19 +156,3 @@ const LoginForm = styled.form`
     width: 100%;
   }
 `;
-const GoogleLoginBtn = styled.button`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  @media (max-width: 769px) {
-    font-size: 0.9rem;
-  }
-`;
-const GoogleLogo = styled.img`
-  width: 1.5rem;
-  margin-right: 0.5rem;
-  @media (max-width: 769px) {
-    width: 1.5rem;
-  }
-`;

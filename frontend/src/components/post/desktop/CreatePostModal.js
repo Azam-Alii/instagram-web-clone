@@ -75,6 +75,7 @@ function CreatePostModal() {
   return (
     <Container createPostModal={createPostModal} modalNo={modalNo}>
       {/* 1st modal for selecting images from computer */}
+      <div className="black-overlay"></div>
 
       {(images.length === 0 || modalNo === 0) && (
         <>
@@ -232,10 +233,7 @@ const Container = styled.div`
   width: ${props => (props.modalNo === 2 ? "65rem" : "40rem")};
   height: 40rem;
   margin: auto;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  right: 0;
+  inset: 0;
   position: fixed;
   z-index: 1000;
   display: ${props => (props.createPostModal ? "" : "none")};

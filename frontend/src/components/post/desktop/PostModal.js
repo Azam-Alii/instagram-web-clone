@@ -94,6 +94,7 @@ function PostModal({ post, showPostModal, setShowPostModal }) {
       {post && (
         <OuterContainer showPostModal={showPostModal}>
           <CloseBtn className="fa-solid fa-xmark" onClick={handleModalClose}></CloseBtn>
+          <div className="black-overlay"></div>
           <Container>
             <MoreOption moreOption={moreOption} onClick={() => setMoreOption(prev => !prev)}>
               <i class="fa-solid fa-ellipsis"></i>
@@ -215,6 +216,12 @@ const OuterContainer = styled.div`
   position: fixed;
   z-index: 1000;
   display: ${props => (props.showPostModal ? "flex" : "none")};
+  .black-overlay {
+    height: 100vh;
+    width: 100vw;
+    background-color: black;
+    opacity: 0.4;
+  }
 `;
 const CloseBtn = styled.i`
   position: absolute;

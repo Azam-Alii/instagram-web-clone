@@ -20,7 +20,7 @@ const connectToDb = () => {
 connectToDb();
 
 const server = app.listen(process.env.PORT, (req, res) => {
-  console.log("server listening on port 4000");
+  console.log("server listening");
 });
 
 const io = socket(server, {

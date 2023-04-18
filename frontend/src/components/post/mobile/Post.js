@@ -189,15 +189,15 @@ const TopDiv = styled.div`
 `;
 const MidDiv = styled.div`
   img {
-    width: ${props => (props.imagesLength === 1 ? "100%" : "30rem")};
-    height: ${props => (props.imagesLength === 1 ? "100%" : "30rem")};
-    object-fit: ${props => (props.imagesLength === 1 ? "full" : "cover")};
+    width: 30rem;
+    height: 30rem;
+    object-fit: cover;
   }
   @media (max-width: 426px) {
     img {
-      width: 100%;
-      height: ${props => (props.imagesLength === 1 ? "100%" : "23rem")};
-      object-fit: ${props => (props.imagesLength === 1 ? "full" : "cover")};
+      width: 23rem;
+      height: 23rem;
+      object-fit: cover;
     }
   }
 `;
