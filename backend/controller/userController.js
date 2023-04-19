@@ -106,10 +106,8 @@ exports.loginUser = catchAsyncError(async (req, res) => {
 });
 
 exports.logoutUser = (req, res) => {
-  req.logout(function (err) {
-    res.clearCookie("token").json({
-      success: true,
-    });
+  res.clearCookie("token").json({
+    success: true,
   });
 };
 

@@ -4,27 +4,13 @@ const userRouter = require("./routes/userRoute");
 const postRouter = require("./routes/postRoute");
 const commentRouter = require("./routes/commentRoute");
 const chatRouter = require("./routes/chatRoute");
-const passport = require("passport");
 const cors = require("cors");
-const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const path = require("path");
 
-// middlewares //
-
-app.use(
-  session({
-    secret: "keyboardcat",
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
 app.use(bodyParser.json({ limit: "50mb" }));
 app.use(bodyParser.urlencoded({ extended: true, limit: "50mb" }));
-app.use(passport.initialize());
-app.use(passport.session());
 app.use(cookieParser());
 app.use(cors());
 
