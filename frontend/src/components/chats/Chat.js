@@ -62,7 +62,7 @@ function Chat() {
   }, [chatId]);
 
   useEffect(() => {
-    socket.current = io("https://social-media-by-azam.onrender.com");
+    socket.current = io("https://social-by-azam-ali.onrender.com");
     socket.current.on("getMessage", (data) => {
       setArrivalMessage({
         sender: data.sender,
