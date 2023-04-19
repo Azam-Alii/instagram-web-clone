@@ -19,7 +19,7 @@ const connectToDb = () => {
 
 connectToDb();
 
-const server = app.listen(process.env.PORT, (req, res) => {
+const server = app.listen(4000, (req, res) => {
   console.log("server listening");
 });
 
