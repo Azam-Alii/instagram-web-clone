@@ -9,9 +9,12 @@ const cloudinary = require("cloudinary");
 exports.processRegisterS1 = async (req, res) => {
   const user = await User.findOne({ googleId: req.body.id });
 
-  if (user) {
+  if (user && user.isRegistered) {
     const token = jwt.sign(user._id.toJSON(), process.env.JWT_SECRET);
     res.cookie("token", token, { expire: new Date() + 9999 }).json({ flag: 0 });
+  } else if (user && !user.isRegistered) {
+    const token = jwt.sign(user._id.toJSON(), process.env.JWT_SECRET);
+    res.cookie("tempToken", token).json({ flag: 1 });
   } else {
     const user = await User.create({
       googleId: req.body.id,
@@ -139,7 +142,7 @@ exports.searchUser = catchAsyncError(async (req, res) => {
       users: [],
     });
   } else {
-    const users = await User.find({ username: { $regex: username } });
+    const users = await User.find({ $and: [{ username: { $regex: username } }, { isRegistered: true }] });
 
     res.status(200).json({
       users,

@@ -16,6 +16,7 @@ function SearchModal() {
     await axios
       .post("/api/v1/search", { username })
       .then(res => {
+        console.log(res.data);
         setUsers(res.data.users);
       })
       .catch(err => {
