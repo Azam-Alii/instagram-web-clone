@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
 const socket = require("socket.io");
 
-require("dotenv").config({ path: "backend/.env" });
+require("dotenv").config({ path: "./backend/.env" });
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_NAME,
@@ -23,41 +23,41 @@ const server = app.listen(4000, (req, res) => {
   console.log("server listening");
 });
 
-const io = socket(server, {
-  cors: {
-    origin: `${process.env.FRONTEND_URL}`,
-  },
-});
+// const io = socket(server, {
+//   cors: {
+//     origin: `${process.env.FRONTEND_URL}`,
+//   },
+// });
 
-let users = [];
+// let users = [];
 
-const addUser = (userId, socketId) => {
-  !users.some((user) => user.userId === userId) && users.push({ userId, socketId });
-};
+// const addUser = (userId, socketId) => {
+//   !users.some((user) => user.userId === userId) && users.push({ userId, socketId });
+// };
 
-const removeUser = (socketId) => {
-  users = users.filter((user) => user.socketId !== socketId);
-};
+// const removeUser = (socketId) => {
+//   users = users.filter((user) => user.socketId !== socketId);
+// };
 
-const findUser = (recieverId) => {
-  return users.find((user) => user.userId === recieverId);
-};
+// const findUser = (recieverId) => {
+//   return users.find((user) => user.userId === recieverId);
+// };
 
-io.on("connection", (socket) => {
-  socket.on("addUser", (userId) => {
-    addUser(userId, socket.id);
-  });
+// io.on("connection", (socket) => {
+//   socket.on("addUser", (userId) => {
+//     addUser(userId, socket.id);
+//   });
 
-  socket.on("sendMessage", ({ sender, recieverId, content }) => {
-    const user = findUser(recieverId);
-    if (user)
-      io.to(user.socketId).emit("getMessage", {
-        sender,
-        content,
-      });
-  });
+//   socket.on("sendMessage", ({ sender, recieverId, content }) => {
+//     const user = findUser(recieverId);
+//     if (user)
+//       io.to(user.socketId).emit("getMessage", {
+//         sender,
+//         content,
+//       });
+//   });
 
-  socket.on("disconnect", () => {
-    removeUser(socket.id);
-  });
-});
+//   socket.on("disconnect", () => {
+//     removeUser(socket.id);
+//   });
+// });

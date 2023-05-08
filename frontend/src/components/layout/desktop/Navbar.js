@@ -54,7 +54,7 @@ function Navbar() {
             </Division>
             <Division
               onClick={() => {
-                navigate("/direct");
+                navigate("/notfound");
               }}
             >
               <i class="fa-brands fa-facebook-messenger"></i>

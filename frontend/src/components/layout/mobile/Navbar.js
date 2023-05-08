@@ -20,7 +20,7 @@ function Navbar() {
                 navigate("/search");
               }}
             ></i>
-            <i class="fa-brands fa-facebook-messenger" onClick={() => navigate("/direct")}></i>
+            <i class="fa-brands fa-facebook-messenger" onClick={() => navigate("/notfound")}></i>
             <img src={user.avatar.url} onClick={() => navigate(`/${user.username}`)} />
           </Container>
         </>
