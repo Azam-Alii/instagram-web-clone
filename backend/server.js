@@ -1,7 +1,6 @@
 const app = require("./app");
 const mongoose = require("mongoose");
 const cloudinary = require("cloudinary");
-const socket = require("socket.io");
 
 require("dotenv").config({ path: "./backend/.env" });
 
